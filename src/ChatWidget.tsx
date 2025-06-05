@@ -11,7 +11,8 @@ import {
   getResponsiveWidth, 
   getResponsiveMinWidth,
   FONT_FAMILY,
-  getCharacterCountStyle
+  getCharacterCountStyle,
+  setChatConstants
 } from './shared/styles';
 import { useScrollManagement } from './hooks/useScrollManagement';
 import { useAnimationManagement } from './hooks/useAnimationManagement';
@@ -26,6 +27,8 @@ export interface ChatWidgetProps extends Partial<ChatConfig> {
   sessionId: string;
   apiUrl: string;
   apiKey: string;
+  maxSuggestedQuestionLength?: number;
+  maxSuggestedQuestionQueryLength?: number;
 }
 
 export const ChatWidget: React.FC<ChatWidgetProps> = (props) => {
@@ -107,6 +110,14 @@ export const ChatWidget: React.FC<ChatWidgetProps> = (props) => {
       }));
     }
   }, [props]);
+
+  // Set runtime config for max lengths
+  useEffect(() => {
+    setChatConstants({
+      MAX_SUGGESTED_QUESTION_LENGTH: props.maxSuggestedQuestionLength ?? CHAT_CONSTANTS.MAX_SUGGESTED_QUESTION_LENGTH,
+      MAX_SUGGESTED_QUESTION_QUERY_LENGTH: props.maxSuggestedQuestionQueryLength ?? CHAT_CONSTANTS.MAX_SUGGESTED_QUESTION_QUERY_LENGTH,
+    });
+  }, [props.maxSuggestedQuestionLength, props.maxSuggestedQuestionQueryLength]);
 
   const {
     messages,
@@ -281,6 +292,8 @@ export const ChatWidget: React.FC<ChatWidgetProps> = (props) => {
             setIsAnimating={setIsAnimating}
             formatTime={formatTime}
             lastMessageRef={lastMessageRef}
+            maxSuggestedQuestionLength={props.maxSuggestedQuestionLength}
+            maxSuggestedQuestionQueryLength={props.maxSuggestedQuestionQueryLength}
           />
 
           {/* Input Area */}

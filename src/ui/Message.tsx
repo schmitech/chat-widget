@@ -123,7 +123,7 @@ export const Message: React.FC<MessageProps> = ({
             <div className="relative">
               <button 
                 onClick={() => onCopyToClipboard(message.content, index)}
-                className="text-gray-400 hover:text-gray-600 transition-colors ml-2 p-1 rounded-full hover:bg-gray-100"
+                className="text-gray-400 hover:text-gray-600 transition-colors ml-2 p-1 rounded-full"
                 aria-label="Copy to clipboard"
               >
                 {copiedMessageId === index ? <Check size={16} /> : <Copy size={16} />}

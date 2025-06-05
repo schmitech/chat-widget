@@ -40,14 +40,17 @@ Add this code to your website:
       },
       suggestedQuestions: [
         {
-          text: "How can you help me?",
-          query: "What can you do?"
+          text: "How can you help me?",  // Display text (truncated based on maxSuggestedQuestionLength)
+          query: "What can you do?"      // Query sent to API (truncated based on maxSuggestedQuestionQueryLength)
         },
         {
-          text: "Contact support", 
-          query: "How do I contact support?"
+          text: "Contact support",       // Display text
+          query: "How do I contact support?" // Query sent to API
         }
       ],
+      // Optional: Customize length limits for suggested questions
+      maxSuggestedQuestionLength: 60,      // Display length limit (default: 50)
+      maxSuggestedQuestionQueryLength: 300, // Query length limit (default: 200)
       theme: {
         primary: '#4f46e5',
         secondary: '#7c3aed',
@@ -66,10 +69,8 @@ Add this code to your website:
           userText: '#ffffff'
         },
         suggestedQuestions: {
-          background: '#eef2ff',
-          hoverBackground: '#e0e7ff',
-          text: '#4338ca'
-        },
+        text: '#4338ca'
+      },
         chatButton: {
           background: '#ffffff',
           hoverBackground: '#f8fafc'
@@ -99,7 +100,9 @@ Add this code to your website:
 | `containerSelector` | string | CSS selector for custom container (defaults to bottom-right corner) |
 | `header` | object | Widget header configuration |
 | `welcome` | object | Welcome message configuration |
-| `suggestedQuestions` | array | Array of suggested question buttons |
+| `suggestedQuestions` | array | Array of suggested question buttons (max 50 chars per question, max 200 chars per query) |
+| `maxSuggestedQuestionLength` | number | Maximum display length for suggested question text (default: 50) |
+| `maxSuggestedQuestionQueryLength` | number | Maximum length for suggested question queries sent to API (default: 200) |
 | `theme` | object | Theme customization options |
 | `icon` | string | Widget icon type |
 
@@ -198,6 +201,40 @@ The demo includes several professional themes:
 - **Lavender** - Elegant purple theme
 - **Monochrome** - Sophisticated grayscale
 
+## Suggested Questions Length Configuration
+
+The widget provides flexible length controls for suggested questions:
+
+### Display Length (`maxSuggestedQuestionLength`)
+- Controls how much text is shown on the suggestion buttons
+- Default: 50 characters
+- Text longer than this limit will be truncated with "..." 
+- Example: "This is a very long question that will be truncated..." 
+
+### Query Length (`maxSuggestedQuestionQueryLength`) 
+- Controls the maximum length of the actual query sent to your API
+- Default: 200 characters
+- Queries longer than this limit will be truncated (no ellipsis)
+- Helps prevent overly long API requests
+
+### Usage Example
+
+```javascript
+window.initChatbotWidget({
+  apiUrl: 'https://your-api-url.com',
+  apiKey: 'your-api-key', 
+  sessionId: 'your-session-id',
+  suggestedQuestions: [
+    {
+      text: "Tell me about your company's history and founding story",  // 52 chars - will be truncated if maxSuggestedQuestionLength < 52
+      query: "I'd like to learn about your company's history, founding story, key milestones, and how you've grown over the years"  // 127 chars - will be truncated if maxSuggestedQuestionQueryLength < 127
+    }
+  ],
+  maxSuggestedQuestionLength: 40,    // Button shows: "Tell me about your company's histor..."
+  maxSuggestedQuestionQueryLength: 100  // API receives: "I'd like to learn about your company's history, founding story, key milestones, and how you'"
+});
+```
+
 ## Available Icons
 
 Choose from these built-in icons:
@@ -223,10 +260,12 @@ Choose from these built-in icons:
   },
   suggestedQuestions: [     // Array of suggested questions
     {
-      text: string;        // Button text
-      query: string;       // Question to send when clicked
+      text: string;        // Button text (truncated based on maxSuggestedQuestionLength)
+      query: string;       // Question to send when clicked (truncated based on maxSuggestedQuestionQueryLength)
     }
   ],
+  maxSuggestedQuestionLength?: number;      // Display length limit (default: 50)
+  maxSuggestedQuestionQueryLength?: number; // Query length limit (default: 200)
   theme: { /* theme object */ },
   icon: string;            // Widget icon type
 }

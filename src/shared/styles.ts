@@ -1,6 +1,11 @@
 // Style constants and CSS for the ChatWidget
-export const CHAT_CONSTANTS = {
-    MAX_MESSAGE_LENGTH: 250,
+export const DEFAULT_MAX_SUGGESTED_QUESTION_LENGTH = 50;
+export const DEFAULT_MAX_SUGGESTED_QUESTION_QUERY_LENGTH = 200;
+
+export let CHAT_CONSTANTS = {
+    MAX_MESSAGE_LENGTH: 250 as number,
+    MAX_SUGGESTED_QUESTION_LENGTH: DEFAULT_MAX_SUGGESTED_QUESTION_LENGTH as number,
+    MAX_SUGGESTED_QUESTION_QUERY_LENGTH: DEFAULT_MAX_SUGGESTED_QUESTION_QUERY_LENGTH as number,
     WINDOW_DIMENSIONS: {
       HEIGHT: '600px',
       MAX_HEIGHT: 'calc(100vh - 80px)',
@@ -14,19 +19,19 @@ export const CHAT_CONSTANTS = {
         MD: '600px',
         LG: '700px',
       },
-    },
+    } as const,
     SCROLL_THRESHOLDS: {
       BOTTOM_THRESHOLD: 10,
       TOP_THRESHOLD: 10,
       SHOW_SCROLL_TOP_OFFSET: 200,
-    },
+    } as const,
     ANIMATIONS: {
       SCROLL_TIMEOUT: 300,
       TOGGLE_DELAY: 100,
       ANIMATION_SCROLL_INTERVAL: 100,
       COPY_FEEDBACK_DURATION: 2000,
       VISIBILITY_SKIP_THRESHOLD: 1000,
-    },
+    } as const,
     BUTTON_SIZES: {
       CHAT_BUTTON: { width: '68px', height: '68px' },
       SEND_BUTTON: { width: '52px', height: '52px' },
@@ -37,8 +42,8 @@ export const CHAT_CONSTANTS = {
         SEND: 24,
         MINIMIZE: 28,
       },
-    },
-  } as const;
+    } as const,
+  };
   
   /**
    * Global CSS styles for the ChatWidget component
@@ -376,3 +381,12 @@ export const CHAT_CONSTANTS = {
       : 'rgba(107, 114, 128, 0.1)',
     fontSize: '0.7rem'
   });
+
+// Allow runtime override with flexible typing for number values
+export function setChatConstants(config: Partial<{
+  MAX_MESSAGE_LENGTH?: number;
+  MAX_SUGGESTED_QUESTION_LENGTH?: number;
+  MAX_SUGGESTED_QUESTION_QUERY_LENGTH?: number;
+}>) {
+  Object.assign(CHAT_CONSTANTS, config);
+}

@@ -392,20 +392,6 @@
                 <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; background: #fafafa;">
                     <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #2C3E50; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Suggested Questions</h3>
                     
-                    <div class="color-field" style="margin-bottom: 12px;">
-                        <label for="suggested-bg-color">Background:</label>
-                        <div style="display: flex; align-items: center;">
-                            <input type="color" id="suggested-bg-color" value="#fff7ed">
-                            <div style="margin-left: 10px; height: 24px; width: 100px; background: #fff7ed; border-radius: 4px; border: 1px solid #e5e7eb;"></div>
-                        </div>
-                    </div>
-                    <div class="color-field" style="margin-bottom: 12px;">
-                        <label for="suggested-hover-color">Hover Background:</label>
-                        <div style="display: flex; align-items: center;">
-                            <input type="color" id="suggested-hover-color" value="#ffedd5">
-                            <div style="margin-left: 10px; height: 24px; width: 100px; background: #ffedd5; border-radius: 4px; border: 1px solid #e5e7eb;"></div>
-                        </div>
-                    </div>
                     <div class="color-field">
                         <label for="suggested-text-color">Text Color:</label>
                         <div style="display: flex; align-items: center;">
@@ -453,6 +439,21 @@
                 <button onclick="applyCustomColors()" class="apply-custom-btn" style="padding: 12px 24px; font-size: 16px; background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; font-weight: 600;">Apply Custom Colors</button>
                 <button onclick="resetThemeColors()" class="apply-custom-btn" style="padding: 12px 24px; font-size: 16px; background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; font-weight: 600; margin-left: 10px;">Reset to Default</button>
             </div>
+        </div>
+
+        <h2>Custom Limits</h2>
+        <div class="color-customizer">
+            <div class="color-row">
+                <div class="color-field">
+                    <label for="max-suggested-question-length">Max Question Length:</label>
+                    <input type="number" id="max-suggested-question-length" min="10" max="200" value="50" style="width: 80px;">
+                </div>
+                <div class="color-field">
+                    <label for="max-suggested-question-query-length">Max Query Length:</label>
+                    <input type="number" id="max-suggested-question-query-length" min="50" max="1000" value="200" style="width: 80px;">
+                </div>
+            </div>
+            <button onclick="applyCustomLimits()" class="apply-custom-btn" style="padding: 8px 18px; font-size: 15px; margin-top: 10px;">Apply Custom Limits</button>
         </div>
 
         <h2>Icon Selection</h2>
@@ -522,6 +523,14 @@
           {
             text: "API integration",
             query: "How do I connect to my own API?"
+          },
+          {
+            text: "Widget features",
+            query: "What features does this widget support?"
+          },
+          {
+            text: "Customization options",
+            query: "What can I customize in this widget?"
           }
         ],
         theme: {
@@ -668,8 +677,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#eef2ff',
-                    hoverBackground: '#e0e7ff',
                     text: '#4338ca'
                 },
                 chatButton: {
@@ -697,8 +704,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#f3f4f6',
-                    hoverBackground: '#e5e7eb',
                     text: '#374151'
                 },
                 chatButton: {
@@ -726,8 +731,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#eff6ff',
-                    hoverBackground: '#dbeafe',
                     text: '#1d4ed8'
                 },
                 chatButton: {
@@ -755,8 +758,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#1e293b',
-                    hoverBackground: '#334155',
                     text: '#67e8f9'
                 },
                 chatButton: {
@@ -784,8 +785,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#ecfdf5',
-                    hoverBackground: '#d1fae5',
                     text: '#047857'
                 },
                 chatButton: {
@@ -813,8 +812,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#fff7ed',
-                    hoverBackground: '#ffedd5',
                     text: '#c2410c'
                 },
                 chatButton: {
@@ -842,8 +839,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#f5f3ff',
-                    hoverBackground: '#ede9fe',
                     text: '#6d28d9'
                 },
                 chatButton: {
@@ -871,8 +866,6 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: '#f3f4f6',
-                    hoverBackground: '#e5e7eb',
                     text: '#374151'
                 },
                 chatButton: {
@@ -894,16 +887,24 @@
             },
             suggestedQuestions: [
                 {
-                    text: "I need some help",
+                    text: "I need some help.",
                     query: "How can you help me?"
                 },
                 {
-                    text: "Change theme",
-                    query: "How do I customize the appearance?"
+                    text: "What happened with the dinosaurs?",
+                    query: "I would like to know why the dinosaurs dissapeared."
                 },
                 {
                     text: "API integration",
                     query: "How do I connect to my own API?"
+                },
+                {
+                    text: "Widget features",
+                    query: "What features does this widget support?"
+                },
+                {
+                    text: "Customization options",
+                    query: "What can I customize in this widget?"
                 }
             ],
             theme: themes.modern,
@@ -967,11 +968,22 @@
                     window.ChatbotWidget.setApiUrl(apiUrl);
                     window.ChatbotWidget.setApiKey(apiKey);
                 }
+
+                // Get current limits and validate suggestedQuestions before passing to widget
+                const limits = getCustomLimits();
+                const safeConfig = {
+                    ...defaultConfig,
+                    suggestedQuestions: validateSuggestedQuestions(
+                        defaultConfig.suggestedQuestions,
+                        limits.maxSuggestedQuestionLength,
+                        limits.maxSuggestedQuestionQueryLength
+                    )
+                };
                 
                 window.initChatbotWidget({
                     apiUrl: apiUrl,
                     apiKey: apiKey,
-                    widgetConfig: defaultConfig
+                    widgetConfig: { ...safeConfig, ...limits }
                 });
                 
                 widgetInitialized = true;
@@ -1009,17 +1021,23 @@
                     window.ChatbotWidget.setApiUrl(apiUrl);
                     window.ChatbotWidget.setApiKey(apiKey);
                 }
+
+                // Get current limits and validate suggestedQuestions before passing to widget
+                const limits = getCustomLimits();
+                const safeConfig = {
+                    ...defaultConfig,
+                    suggestedQuestions: validateSuggestedQuestions(
+                        defaultConfig.suggestedQuestions,
+                        limits.maxSuggestedQuestionLength,
+                        limits.maxSuggestedQuestionQueryLength
+                    )
+                };
                 
                 window.initChatbotWidget({
                     apiUrl: apiUrl,
                     apiKey: apiKey,
                     containerSelector: '#custom-container',
-                    widgetConfig: {
-                        ...defaultConfig,
-                        header: {
-                            title: "Custom Container Chat"
-                        }
-                    }
+                    widgetConfig: { ...safeConfig, ...limits, header: { title: "Custom Container Chat" } }
                 });
                 
                 customWidgetInitialized = true;
@@ -1061,8 +1079,7 @@
                 document.getElementById('user-bubble-color').value = theme.message.user;
                 document.getElementById('assistant-bubble-color').value = theme.message.assistant;
                 document.getElementById('icon-color').value = theme.iconColor;
-                document.getElementById('suggested-bg-color').value = theme.suggestedQuestions.background;
-                document.getElementById('suggested-hover-color').value = theme.suggestedQuestions.hoverBackground;
+
                 document.getElementById('suggested-text-color').value = theme.suggestedQuestions.text;
                 document.getElementById('chat-button-bg-color').value = theme.chatButton.background;
                 document.getElementById('chat-button-hover-color').value = theme.chatButton.hoverBackground;
@@ -1096,8 +1113,8 @@
                     userText: '#ffffff'
                 },
                 suggestedQuestions: {
-                    background: document.getElementById('suggested-bg-color').value,
-                    hoverBackground: document.getElementById('suggested-hover-color').value,
+                    background: 'transparent',
+                    hoverBackground: 'transparent',
                     text: document.getElementById('suggested-text-color').value
                 },
                 chatButton: {
@@ -1125,7 +1142,22 @@
         // Update content
         function updateContent(contentName) {
             if (window.ChatbotWidget && contents[contentName]) {
-                window.ChatbotWidget.updateWidgetConfig(contents[contentName]);
+                // Track the current content type
+                currentContentType = contentName;
+                
+                const limits = getCustomLimits();
+                const updatedContent = {
+                    ...contents[contentName],
+                    suggestedQuestions: validateSuggestedQuestions(
+                        contents[contentName].suggestedQuestions || [],
+                        limits.maxSuggestedQuestionLength,
+                        limits.maxSuggestedQuestionQueryLength
+                    )
+                };
+                window.ChatbotWidget.updateWidgetConfig(updatedContent);
+                
+                // Reset previous limits tracking when content changes
+                previousLimits = { ...limits };
                 
                 // Update implementation code
                 updateCodeExample();
@@ -1308,6 +1340,19 @@
             });
         }
 
+        // Validate and truncate suggested questions
+        function validateSuggestedQuestions(questions, maxLength = 50, maxQueryLength = 200) {
+            return questions.map(question => ({
+                ...question,
+                text: question.text && question.text.length > maxLength 
+                    ? question.text.substring(0, maxLength - 3) + '...'
+                    : question.text,
+                query: question.query && question.query.length > maxQueryLength
+                    ? question.query.substring(0, maxQueryLength)
+                    : question.query
+            }));
+        }
+
         // --- Live Theme Customizer ---
         // Listen for color input changes for live preview
         document.addEventListener('DOMContentLoaded', function() {
@@ -1333,8 +1378,7 @@
             document.getElementById('user-bubble-color').value = theme.message.user;
             document.getElementById('assistant-bubble-color').value = theme.message.assistant;
             document.getElementById('icon-color').value = theme.iconColor;
-            document.getElementById('suggested-bg-color').value = theme.suggestedQuestions.background;
-            document.getElementById('suggested-hover-color').value = theme.suggestedQuestions.hoverBackground;
+
             document.getElementById('suggested-text-color').value = theme.suggestedQuestions.text;
             document.getElementById('chat-button-bg-color').value = theme.chatButton.background;
             document.getElementById('chat-button-hover-color').value = theme.chatButton.hoverBackground;
@@ -1342,6 +1386,72 @@
             updateColorPreviews();
             // Live update the widget
             applyCustomColors();
+        }
+
+        // Add this function to handle custom limits
+        function getCustomLimits() {
+            return {
+                maxSuggestedQuestionLength: Number(document.getElementById('max-suggested-question-length').value) || 50,
+                maxSuggestedQuestionQueryLength: Number(document.getElementById('max-suggested-question-query-length').value) || 200
+            };
+        }
+        // Track which content is currently active and previous limits
+        let currentContentType = 'default';
+        let previousLimits = {
+            maxSuggestedQuestionLength: 50,
+            maxSuggestedQuestionQueryLength: 200
+        };
+        
+        function applyCustomLimits() {
+            const newLimits = getCustomLimits();
+            if (window.ChatbotWidget) {
+                // Use the appropriate original source based on current content type
+                const originalSuggestedQuestions = currentContentType === 'default' 
+                    ? defaultConfig.suggestedQuestions 
+                    : contents[currentContentType]?.suggestedQuestions || defaultConfig.suggestedQuestions;
+                
+                // Get current widget questions to selectively update only changed fields
+                const currentConfig = window.ChatbotWidget.getCurrentConfig?.() || defaultConfig;
+                const currentQuestions = currentConfig.suggestedQuestions || originalSuggestedQuestions;
+                
+                // Determine which limits changed
+                const questionLengthChanged = newLimits.maxSuggestedQuestionLength !== previousLimits.maxSuggestedQuestionLength;
+                const queryLengthChanged = newLimits.maxSuggestedQuestionQueryLength !== previousLimits.maxSuggestedQuestionQueryLength;
+                
+                // Process suggested questions selectively
+                const updatedSuggestedQuestions = originalSuggestedQuestions.map((originalQuestion, index) => {
+                    const currentQuestion = currentQuestions[index] || originalQuestion;
+                    
+                    return {
+                        ...currentQuestion,
+                        // Only update text if question length limit changed
+                        text: questionLengthChanged
+                            ? (originalQuestion.text && originalQuestion.text.length > newLimits.maxSuggestedQuestionLength
+                                ? originalQuestion.text.substring(0, newLimits.maxSuggestedQuestionLength - 3) + '...'
+                                : originalQuestion.text)
+                            : currentQuestion.text,
+                        // Only update query if query length limit changed  
+                        query: queryLengthChanged
+                            ? (originalQuestion.query && originalQuestion.query.length > newLimits.maxSuggestedQuestionQueryLength
+                                ? originalQuestion.query.substring(0, newLimits.maxSuggestedQuestionQueryLength)
+                                : originalQuestion.query)
+                            : currentQuestion.query
+                    };
+                });
+                
+                // Update widget with both limits and selectively refreshed suggested questions
+                window.ChatbotWidget.updateWidgetConfig({
+                    ...newLimits,
+                    suggestedQuestions: updatedSuggestedQuestions
+                });
+                
+                console.log('Applied custom limits:', newLimits);
+                console.log('Question length changed:', questionLengthChanged, 'Query length changed:', queryLengthChanged);
+                console.log('Updated suggested questions:', updatedSuggestedQuestions);
+                
+                // Update previous limits for next comparison
+                previousLimits = { ...newLimits };
+            }
         }
     </script>
 </body>

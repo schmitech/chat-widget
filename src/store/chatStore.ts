@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { streamChat, configureApi } from '@schmitech/chatbot-api';
 import { getApiUrl, getApiKey } from '../index';
 import { getOrCreateSessionId, setSessionId } from '../utils/sessionManager';
+import { CHAT_CONSTANTS } from '../shared/styles';
 
 export type MessageRole = 'user' | 'assistant' | 'system';
 
@@ -14,9 +15,7 @@ interface ChatState {
   messages: Message[];
   isLoading: boolean;
   error: string | null;
-  voiceEnabled: boolean;
   sessionId: string;
-  toggleVoice: () => void;
   sendMessage: (content: string) => Promise<void>;
   appendToLastMessage: (content: string) => void;
   clearMessages: () => void;
@@ -79,10 +78,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
   isLoading: false,
   error: null,
-  voiceEnabled: false,
   sessionId: getOrCreateSessionId(),
-  
-  toggleVoice: () => set(state => ({ voiceEnabled: !state.voiceEnabled })),
   
   getSessionId: () => {
     return get().sessionId;
@@ -90,38 +86,38 @@ export const useChatStore = create<ChatState>((set, get) => ({
   
   sendMessage: async (content: string) => {
     try {
+      // Guardrail: Truncate if content is too long
+      const maxLen = CHAT_CONSTANTS.MAX_SUGGESTED_QUESTION_QUERY_LENGTH;
+      let safeContent = content;
+      if (content.length > maxLen) {
+        safeContent = content.substring(0, maxLen);
+      }
       // Ensure API is configured before sending message
       if (!ensureApiConfigured()) {
         throw new Error('API not properly configured');
       }
-      
       // Add user message
       set(state => ({
-        messages: [...state.messages, { role: 'user', content }],
+        messages: [...state.messages, { role: 'user', content: safeContent }],
         isLoading: true,
         error: null
       }));
-      
       // Add empty assistant message that will be filled as the stream comes in
       set(state => ({
         messages: [...state.messages, { role: 'assistant', content: '' }],
       }));
-      
       let receivedAnyText = false;
-      
       try {
-        // Use the streamChat function from chatbot-api with the voiceEnabled state
-        for await (const chunk of streamChat(content, get().voiceEnabled)) {
+        // Use the streamChat function from chatbot-api
+        for await (const chunk of streamChat(safeContent)) {
           if (chunk.text) {
             // Append the text to the last message
             get().appendToLastMessage(chunk.text);
             receivedAnyText = true;
           }
-          
           // Handle audio content separately - don't append it to the text
           // The audio handling should be done in the UI component
         }
-        
         // If we didn't receive any text, show an error message
         if (!receivedAnyText) {
           get().appendToLastMessage('No response received from the server. Please try again later.');
@@ -130,10 +126,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
         console.error('Chat API error:', error);
         get().appendToLastMessage('Sorry, there was an error processing your request.');
       }
-      
       // Set loading to false when done
       set({ isLoading: false });
-      
     } catch (error) {
       console.error('Chat store error:', error);
       set(state => ({

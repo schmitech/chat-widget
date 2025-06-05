@@ -80,14 +80,38 @@ Initializes widget configuration.
 |-----------|-------------|----------|
 | `apiUrl` | URL of chatbot API | ✅ Yes |
 | `apiKey` | API key for authentication | ✅ Yes |
+| `sessionId` | Unique session identifier | ✅ Yes |
 | `containerSelector` | CSS selector for widget container | ❌ No (Defaults to body) |
+| `widgetConfig` | Widget appearance and behavior configuration | ❌ No |
+| `widgetConfig.maxSuggestedQuestionLength` | Max display length for suggested questions (default: 50) | ❌ No |
+| `widgetConfig.maxSuggestedQuestionQueryLength` | Max query length sent to API (default: 200) | ❌ No |
 
 Example configuration:
 ```javascript
 initChatbotWidget({
   apiUrl: 'https://your-api-url.com',
   apiKey: 'your-api-key',
-  containerSelector: '#chat-container'
+  sessionId: 'unique-session-id',
+  containerSelector: '#chat-container',
+  widgetConfig: {
+    header: { title: "Support Chat" },
+    welcome: { 
+      title: "How can we help?",
+      description: "Ask us anything!"
+    },
+    suggestedQuestions: [
+      {
+        text: "I need help with my account",
+        query: "Can you help me with account-related questions?"
+      }
+    ],
+    maxSuggestedQuestionLength: 60,      // Custom display length
+    maxSuggestedQuestionQueryLength: 300, // Custom query length
+    theme: {
+      primary: '#2563eb',
+      secondary: '#3b82f6'
+    }
+  }
 });
 ```
 
@@ -153,8 +177,8 @@ Package URL: [@schmitech/chatbot-widget](https://www.npmjs.com/package/@schmitec
 
 **UMD + CSS separately:**
 ```html
-<script src="https://unpkg.com/@schmitech/chatbot-widget@0.2.0"></script>
-<link rel="stylesheet" href="https://unpkg.com/@schmitech/chatbot-widget@0.2.0/dist/chatbot-widget.css">
+<script src="https://unpkg.com/@schmitech/chatbot-widget@0.4.4"></script>
+<link rel="stylesheet" href="https://unpkg.com/@schmitech/chatbot-widget@0.4.4/dist/chatbot-widget.css">
 ```
 
 ### JavaScript/TypeScript

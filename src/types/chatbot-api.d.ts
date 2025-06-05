@@ -8,8 +8,7 @@ declare module '@schmitech/chatbot-api' {
   }
 
   export function streamChat(
-    message: string,
-    voiceEnabled: boolean
+    message: string
   ): AsyncGenerator<StreamResponse>;
   
   export function configureApi(apiUrl: string, apiKey: string, sessionId: string): void;
