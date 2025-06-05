@@ -126,7 +126,7 @@ export const MessagesList: React.FC<MessagesListProps> = ({
             </div>
           </div>
           <div className="w-full px-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-lg mx-auto sm:max-w-2xl">
+            <div className="grid gap-2 max-w-2xl mx-auto grid-cols-1 sm:grid-cols-2">
               {currentConfig.suggestedQuestions.map((question: any, index: number) => (
                 <div
                   key={index}
