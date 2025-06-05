@@ -36,6 +36,16 @@ npm run build || {
     exit 1
 }
 
+# 1.1. Ensure TypeScript declarations are generated
+echo "Ensuring TypeScript declarations are generated..."
+if [ ! -f "dist/index.d.ts" ]; then
+    echo "TypeScript declarations missing, running tsc explicitly..."
+    npx tsc --emitDeclarationOnly || {
+        echo "Error: TypeScript declaration generation failed"
+        exit 1
+    }
+fi
+
 # 2. Create combined bundle
 echo "Creating combined bundle..."
 npm run build:bundle || {
@@ -45,14 +55,52 @@ npm run build:bundle || {
 
 # Verify build outputs
 echo "Verifying build outputs..."
-if [ ! -f "dist/chatbot-widget.umd.js" ] || [ ! -f "dist/chatbot-widget.es.js" ] || [ ! -f "dist/chatbot-widget.bundle.js" ]; then
-    echo "Error: Some build outputs are missing"
+REQUIRED_FILES=(
+    "dist/chatbot-widget.umd.js"
+    "dist/chatbot-widget.es.js" 
+    "dist/chatbot-widget.bundle.js"
+    "dist/chatbot-widget.css"
+    "dist/index.d.ts"
+    "dist/ChatWidget.d.ts"
+)
+
+MISSING_FILES=()
+for file in "${REQUIRED_FILES[@]}"; do
+    if [ ! -f "$file" ]; then
+        MISSING_FILES+=("$file")
+    fi
+done
+
+if [ ${#MISSING_FILES[@]} -ne 0 ]; then
+    echo "Error: Required build outputs are missing:"
+    printf '%s\n' "${MISSING_FILES[@]}"
     exit 1
 fi
 
-echo "Build completed successfully!"
-echo "Version: $VERSION"
-echo "You can now:"
-echo "1. Open demo.html in your browser to test the widget"
-echo "2. Run 'npm pack --dry-run' to test the package"
-echo "3. Run 'npm publish --access public' to publish" 
+# Additional verification for TypeScript declarations
+echo "Verifying TypeScript declarations structure..."
+if [ ! -d "dist/ui" ] || [ ! -d "dist/store" ] || [ ! -d "dist/hooks" ]; then
+    echo "Warning: Some TypeScript declaration folders are missing"
+    echo "Running TypeScript compilation again..."
+    npx tsc --emitDeclarationOnly || {
+        echo "Error: TypeScript declaration generation failed on retry"
+        exit 1
+    }
+fi
+
+# Final size and file count verification
+echo "Final verification..."
+TOTAL_FILES=$(find dist -type f | wc -l)
+DIST_SIZE=$(du -sh dist | cut -f1)
+
+echo "✅ Build completed successfully!"
+echo "📦 Version: $VERSION"
+echo "📁 Generated $TOTAL_FILES files in dist/ ($DIST_SIZE total)"
+echo ""
+echo "🚀 Ready for publishing! You can now:"
+echo "   1. Test locally: Open demo.html in your browser"
+echo "   2. Dry run: npm pack --dry-run"
+echo "   3. Publish: npm publish --access public"
+echo ""
+echo "📋 Generated files:"
+ls -la dist/ | grep -E '\.(js|css|d\.ts)$' | awk '{print "   " $9 " (" $5 " bytes)"}' 
